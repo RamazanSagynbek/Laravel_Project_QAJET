@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # PHP Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qajet-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - ./storage:/var/www/storage
+    networks:
+      - qajet
+    depends_on:
+      - db
+
+  # Nginx Web Server
+  nginx:
+    image: nginx:alpine
+    container_name: qajet-nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - qajet
+    depends_on:
+      - app
+
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: qajet-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: qajet
+      POSTGRES_USER: qajet
+      POSTGRES_PASSWORD: qajet_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - qajet
+
+  # Redis (for caching & queues)
+  redis:
+    image: redis:alpine
+    container_name: qajet-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    networks:
+      - qajet
+
+networks:
+  qajet:
+    driver: bridge
+
+volumes:
+  pgdata:
