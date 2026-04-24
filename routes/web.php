@@ -8,9 +8,13 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', fn () => redirect()->route('home'))->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
 // Auth-required routes FIRST (so /create doesn't match {id})
 Route::middleware('auth')->group(function () {
@@ -36,10 +40,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/services/{service}', [ServiceController::class, 'update'])->name('services.update');
     Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
 
-    Route::get('/community', [ChatController::class, 'index'])->name('chats.index');
-    Route::post('/community/dm', [ChatController::class, 'store'])->name('chats.store');
-    Route::get('/community/{chat}', [ChatController::class, 'show'])->name('chats.show');
-    Route::post('/community/{chat}/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::post('/favorites', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+
+    Route::middleware('has.university')->group(function () {
+        Route::get('/community', [ChatController::class, 'index'])->name('chats.index');
+        Route::post('/community/dm', [ChatController::class, 'store'])->name('chats.store');
+        Route::get('/community/{chat}', [ChatController::class, 'show'])->name('chats.show');
+        Route::get('/community/{chat}/messages', [ChatController::class, 'messages'])->name('chats.messages');
+        Route::post('/community/{chat}/messages', [MessageController::class, 'store'])->name('messages.store');
+    });
 });
 
 // Public routes AFTER auth routes

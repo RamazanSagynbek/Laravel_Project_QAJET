@@ -29,19 +29,19 @@
         <div class="glass rounded-2xl p-6">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
-                    <div class="text-3xl font-extrabold" style="color: var(--accent);">{{ \App\Models\Listing::where('status','active')->count() }}</div>
+                    <div class="text-3xl font-extrabold" style="color: var(--accent);">{{ $stats['listings_count'] }}</div>
                     <div class="text-gray-400 text-sm mt-1">Rooms Available</div>
                 </div>
                 <div>
-                    <div class="text-3xl font-extrabold" style="color: var(--accent);">{{ \App\Models\Product::where('status','active')->count() }}</div>
+                    <div class="text-3xl font-extrabold" style="color: var(--accent);">{{ $stats['products_count'] }}</div>
                     <div class="text-gray-400 text-sm mt-1">Products Listed</div>
                 </div>
                 <div>
-                    <div class="text-3xl font-extrabold" style="color: var(--accent);">{{ \App\Models\Service::where('status','active')->count() }}</div>
+                    <div class="text-3xl font-extrabold" style="color: var(--accent);">{{ $stats['services_count'] }}</div>
                     <div class="text-gray-400 text-sm mt-1">Services Offered</div>
                 </div>
                 <div>
-                    <div class="text-3xl font-extrabold" style="color: var(--accent);">{{ \App\Models\User::count() }}</div>
+                    <div class="text-3xl font-extrabold" style="color: var(--accent);">{{ $stats['users_count'] }}</div>
                     <div class="text-gray-400 text-sm mt-1">Students Joined</div>
                 </div>
             </div>

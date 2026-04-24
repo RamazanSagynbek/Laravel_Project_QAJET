@@ -6,6 +6,7 @@ use App\Models\Listing;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -21,28 +22,37 @@ class AdminController extends Controller
             'active_services' => Service::where('status', 'active')->count(),
         ];
 
-        $latestUsers = User::latest()->take(10)->get();
-        $latestListings = Listing::with('user')->latest()->take(10)->get();
-        $latestProducts = Product::with('user')->latest()->take(10)->get();
-        $latestServices = Service::with('user')->latest()->take(10)->get();
+        $latestUsers = User::latest()->paginate(10, ['*'], 'users_page');
+        $latestListings = Listing::with('user')->latest()->paginate(10, ['*'], 'listings_page');
+        $latestProducts = Product::with('user')->latest()->paginate(10, ['*'], 'products_page');
+        $latestServices = Service::with('user')->latest()->paginate(10, ['*'], 'services_page');
 
         return view('admin.dashboard', compact('stats', 'latestUsers', 'latestListings', 'latestProducts', 'latestServices'));
     }
 
     public function deleteListing(Listing $listing)
     {
+        if ($listing->image) {
+            Storage::disk('public')->delete($listing->image);
+        }
         $listing->delete();
         return back()->with('success', 'Listing deleted by admin.');
     }
 
     public function deleteProduct(Product $product)
     {
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
         $product->delete();
         return back()->with('success', 'Product deleted by admin.');
     }
 
     public function deleteService(Service $service)
     {
+        if ($service->image) {
+            Storage::disk('public')->delete($service->image);
+        }
         $service->delete();
         return back()->with('success', 'Service deleted by admin.');
     }

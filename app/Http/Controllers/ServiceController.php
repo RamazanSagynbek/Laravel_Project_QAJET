@@ -2,15 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesResource;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
-use App\Models\Service;
 use App\Models\Category;
+use App\Models\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
+    use ManagesResource;
+
+    protected function getStoragePath(): string
+    {
+        return 'services';
+    }
+
+    protected function getIndexRoute(): string
+    {
+        return 'services.index';
+    }
+
+    protected function getShowRoute(): string
+    {
+        return 'services.show';
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'Service';
+    }
+
     public function index(Request $request)
     {
         $query = Service::where('status', 'active')->with('user', 'category');
@@ -22,7 +44,11 @@ class ServiceController extends Controller
             $query->where('price_type', $request->price_type);
         }
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $search = '%' . $request->search . '%';
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', $search)
+                  ->orWhere('description', 'like', $search);
+            });
         }
 
         $services = $query->latest()->paginate(12);
@@ -39,15 +65,7 @@ class ServiceController extends Controller
 
     public function store(StoreServiceRequest $request)
     {
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('services', 'public');
-        }
-
-        $request->user()->services()->create($validated);
-
-        return redirect()->route('services.index')->with('success', 'Service listed successfully!');
+        return $this->storeResource($request, $request->validated(), 'services');
     }
 
     public function show(Service $service)
@@ -65,30 +83,11 @@ class ServiceController extends Controller
 
     public function update(UpdateServiceRequest $request, Service $service)
     {
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            if ($service->image) {
-                Storage::disk('public')->delete($service->image);
-            }
-            $validated['image'] = $request->file('image')->store('services', 'public');
-        }
-
-        $service->update($validated);
-
-        return redirect()->route('services.show', $service)->with('success', 'Service updated!');
+        return $this->updateResource($request, $service, $request->validated());
     }
 
     public function destroy(Service $service)
     {
-        $this->authorize('delete', $service);
-
-        if ($service->image) {
-            Storage::disk('public')->delete($service->image);
-        }
-
-        $service->delete();
-
-        return redirect()->route('services.index')->with('success', 'Service deleted!');
+        return $this->destroyResource($service);
     }
 }

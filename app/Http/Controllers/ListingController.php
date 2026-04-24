@@ -2,14 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Listing;
+use App\Http\Controllers\Concerns\ManagesResource;
 use App\Http\Requests\StoreListingRequest;
 use App\Http\Requests\UpdateListingRequest;
+use App\Models\Listing;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ListingController extends Controller
 {
+    use ManagesResource;
+
+    protected function getStoragePath(): string
+    {
+        return 'listings';
+    }
+
+    protected function getIndexRoute(): string
+    {
+        return 'listings.index';
+    }
+
+    protected function getShowRoute(): string
+    {
+        return 'listings.show';
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'Listing';
+    }
+
     public function index(Request $request)
     {
         $query = Listing::where('status', 'active')->with('user');
@@ -30,7 +52,11 @@ class ListingController extends Controller
             $query->where('rooms', $request->rooms);
         }
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $search = '%' . $request->search . '%';
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', $search)
+                  ->orWhere('description', 'like', $search);
+            });
         }
 
         $listings = $query->latest()->paginate(12);
@@ -45,15 +71,7 @@ class ListingController extends Controller
 
     public function store(StoreListingRequest $request)
     {
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('listings', 'public');
-        }
-
-        $request->user()->listings()->create($validated);
-
-        return redirect()->route('listings.index')->with('success', 'Listing created successfully!');
+        return $this->storeResource($request, $request->validated(), 'listings');
     }
 
     public function show(Listing $listing)
@@ -70,30 +88,11 @@ class ListingController extends Controller
 
     public function update(UpdateListingRequest $request, Listing $listing)
     {
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            if ($listing->image) {
-                Storage::disk('public')->delete($listing->image);
-            }
-            $validated['image'] = $request->file('image')->store('listings', 'public');
-        }
-
-        $listing->update($validated);
-
-        return redirect()->route('listings.show', $listing)->with('success', 'Listing updated!');
+        return $this->updateResource($request, $listing, $request->validated());
     }
 
     public function destroy(Listing $listing)
     {
-        $this->authorize('delete', $listing);
-
-        if ($listing->image) {
-            Storage::disk('public')->delete($listing->image);
-        }
-
-        $listing->delete();
-
-        return redirect()->route('listings.index')->with('success', 'Listing deleted!');
+        return $this->destroyResource($listing);
     }
 }

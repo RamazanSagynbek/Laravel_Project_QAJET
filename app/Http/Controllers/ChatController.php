@@ -72,4 +72,28 @@ class ChatController extends Controller
 
         return redirect()->route('chats.show', $chat);
     }
+
+    public function messages(Chat $chat)
+    {
+        $this->authorize('view', $chat);
+
+        $messages = $chat->messages()
+            ->with('user')
+            ->latest()
+            ->take(100)
+            ->get()
+            ->reverse()
+            ->values();
+
+        return response()->json([
+            'messages' => $messages->map(fn ($msg) => [
+                'id' => $msg->id,
+                'body' => $msg->body,
+                'user_id' => $msg->user_id,
+                'user_name' => $msg->user->name,
+                'created_at' => $msg->created_at->format('H:i'),
+                'is_me' => $msg->user_id === auth()->id(),
+            ]),
+        ]);
+    }
 }

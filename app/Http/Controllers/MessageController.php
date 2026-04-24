@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use App\Models\Message;
+use App\Notifications\NewMessageNotification;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -22,6 +23,12 @@ class MessageController extends Controller
         ]);
 
         $chat->touch();
+
+        $message->load('user');
+        $chat->users()
+            ->where('users.id', '!=', auth()->id())
+            ->get()
+            ->each(fn ($user) => $user->notify(new NewMessageNotification($message)));
 
         return redirect()->route('chats.show', $chat);
     }

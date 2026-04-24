@@ -58,6 +58,55 @@
     </div>
 
     <script>
-        document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+        const messagesContainer = document.getElementById('messages');
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        const chatId = {{ $chat->id }};
+        const currentUserId = {{ auth()->id() }};
+        let lastMessageId = {{ $chat->messages->last()?->id ?? 0 }};
+
+        function renderMessage(msg) {
+            const alignClass = msg.is_me ? 'justify-end' : 'justify-start';
+            const bubbleStyle = msg.is_me ? 'background-color: var(--accent);' : 'background-color: var(--bg-input);';
+            const textClass = msg.is_me ? 'text-black' : 'text-gray-200';
+            const timeAlign = msg.is_me ? 'text-right' : '';
+            const userName = msg.is_me ? '' : `<p class="text-xs text-gray-500 mb-1">${msg.user_name}</p>`;
+
+            return `
+                <div class="flex ${alignClass}">
+                    <div class="max-w-xs lg:max-w-md">
+                        ${userName}
+                        <div class="${textClass} rounded-2xl px-4 py-2" style="${bubbleStyle}">
+                            <p>${msg.body}</p>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1 ${timeAlign}">${msg.created_at}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function pollMessages() {
+            try {
+                const res = await fetch(`/community/${chatId}/messages`);
+                if (!res.ok) return;
+                const data = await res.json();
+
+                const newMessages = data.messages.filter(m => m.id > lastMessageId);
+                if (newMessages.length > 0) {
+                    const wasAtBottom = messagesContainer.scrollTop + messagesContainer.clientHeight >= messagesContainer.scrollHeight - 50;
+                    newMessages.forEach(msg => {
+                        messagesContainer.insertAdjacentHTML('beforeend', renderMessage(msg));
+                        if (msg.id > lastMessageId) lastMessageId = msg.id;
+                    });
+                    if (wasAtBottom) {
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                }
+            } catch (e) {
+                console.error('Poll error', e);
+            }
+        }
+
+        setInterval(pollMessages, 5000);
     </script>
 </x-app-layout>

@@ -37,7 +37,7 @@
                             {{ substr($service->user->name, 0, 1) }}
                         </div>
                         <div>
-                            <p class="text-white font-semibold">{{ $service->user->name }}</p>
+                            <a href="{{ route('users.show', $service->user) }}" class="text-white font-semibold hover:underline">{{ $service->user->name }}</a>
                             @if($service->user->university)
                                 <p class="text-gray-400 text-sm">{{ $service->user->university }}</p>
                             @endif
@@ -46,10 +46,18 @@
 
                     @auth
                         @if(auth()->id() !== $service->user_id)
-                            <form method="POST" action="{{ route('chats.store') }}">
+                            <form method="POST" action="{{ route('chats.store') }}" class="mb-3">
                                 @csrf
                                 <input type="hidden" name="user_id" value="{{ $service->user_id }}">
                                 <button type="submit" class="btn-accent w-full font-semibold py-3 rounded-xl transition hover:opacity-80">Send Message</button>
+                            </form>
+                            <form method="POST" action="{{ route('favorites.store') }}">
+                                @csrf
+                                <input type="hidden" name="type" value="service">
+                                <input type="hidden" name="id" value="{{ $service->id }}">
+                                <button type="submit" class="w-full py-3 rounded-xl transition border font-semibold" style="background-color: var(--bg-input); border-color: var(--border-color); color: var(--accent);">
+                                    &#10084; Save to Favorites
+                                </button>
                             </form>
                         @else
                             <div class="flex gap-2">

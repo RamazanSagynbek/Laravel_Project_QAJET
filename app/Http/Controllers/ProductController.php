@@ -2,15 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\ManagesResource;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    use ManagesResource;
+
+    protected function getStoragePath(): string
+    {
+        return 'products';
+    }
+
+    protected function getIndexRoute(): string
+    {
+        return 'products.index';
+    }
+
+    protected function getShowRoute(): string
+    {
+        return 'products.show';
+    }
+
+    protected function getResourceName(): string
+    {
+        return 'Product';
+    }
+
     public function index(Request $request)
     {
         $query = Product::where('status', 'active')->with('user', 'category');
@@ -28,7 +50,11 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $search = '%' . $request->search . '%';
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', $search)
+                  ->orWhere('description', 'like', $search);
+            });
         }
 
         $products = $query->latest()->paginate(12);
@@ -45,15 +71,7 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('products', 'public');
-        }
-
-        $request->user()->products()->create($validated);
-
-        return redirect()->route('products.index')->with('success', 'Product listed successfully!');
+        return $this->storeResource($request, $request->validated(), 'products');
     }
 
     public function show(Product $product)
@@ -71,30 +89,11 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-            $validated['image'] = $request->file('image')->store('products', 'public');
-        }
-
-        $product->update($validated);
-
-        return redirect()->route('products.show', $product)->with('success', 'Product updated!');
+        return $this->updateResource($request, $product, $request->validated());
     }
 
     public function destroy(Product $product)
     {
-        $this->authorize('delete', $product);
-
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
-        }
-
-        $product->delete();
-
-        return redirect()->route('products.index')->with('success', 'Product deleted!');
+        return $this->destroyResource($product);
     }
 }

@@ -62,6 +62,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="px-5 py-3" style="border-top: 1px solid var(--border-color);">
+                    {{ $latestUsers->links() }}
+                </div>
             </div>
         </div>
 
@@ -98,6 +101,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="px-5 py-3" style="border-top: 1px solid var(--border-color);">
+                    {{ $latestListings->links() }}
+                </div>
             </div>
         </div>
 
@@ -134,6 +140,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="px-5 py-3" style="border-top: 1px solid var(--border-color);">
+                    {{ $latestProducts->links() }}
+                </div>
             </div>
         </div>
 
@@ -170,6 +179,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="px-5 py-3" style="border-top: 1px solid var(--border-color);">
+                    {{ $latestServices->links() }}
+                </div>
             </div>
         </div>
     </div>
