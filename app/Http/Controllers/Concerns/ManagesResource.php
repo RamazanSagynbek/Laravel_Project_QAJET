@@ -15,23 +15,30 @@ trait ManagesResource
 
     abstract protected function getResourceName(): string;
 
+    protected function getDisk(): string
+    {
+        return config('filesystems.default', 'public');
+    }
+
     protected function processImageUpload(Request $request, ?string $oldImage = null): ?string
     {
         if (!$request->hasFile('image')) {
             return null;
         }
 
+        $disk = $this->getDisk();
+
         if ($oldImage) {
-            Storage::disk('public')->delete($oldImage);
+            Storage::disk($disk)->delete($oldImage);
         }
 
-        return $request->file('image')->store($this->getStoragePath(), 'public');
+        return $request->file('image')->store($this->getStoragePath(), $disk);
     }
 
     protected function deleteResourceImage(?string $image): void
     {
         if ($image) {
-            Storage::disk('public')->delete($image);
+            Storage::disk($this->getDisk())->delete($image);
         }
     }
 

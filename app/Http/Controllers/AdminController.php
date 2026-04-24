@@ -33,7 +33,7 @@ class AdminController extends Controller
     public function deleteListing(Listing $listing)
     {
         if ($listing->image) {
-            Storage::disk('public')->delete($listing->image);
+            Storage::disk(config('filesystems.default', 'public'))->delete($listing->image);
         }
         $listing->delete();
         return back()->with('success', 'Listing deleted by admin.');
@@ -42,7 +42,7 @@ class AdminController extends Controller
     public function deleteProduct(Product $product)
     {
         if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+            Storage::disk(config('filesystems.default', 'public'))->delete($product->image);
         }
         $product->delete();
         return back()->with('success', 'Product deleted by admin.');
@@ -51,7 +51,7 @@ class AdminController extends Controller
     public function deleteService(Service $service)
     {
         if ($service->image) {
-            Storage::disk('public')->delete($service->image);
+            Storage::disk(config('filesystems.default', 'public'))->delete($service->image);
         }
         $service->delete();
         return back()->with('success', 'Service deleted by admin.');
