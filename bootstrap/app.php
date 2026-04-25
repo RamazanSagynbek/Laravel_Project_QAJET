@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
             'has.university' => \App\Http\Middleware\EnsureUserHasUniversity::class,
         ]);
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
