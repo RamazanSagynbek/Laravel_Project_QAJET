@@ -14,6 +14,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Skip if users already exist (idempotent)
+        if (User::where('email', 'admin@qajet.kz')->exists()) {
+            echo "Database already seeded. Skipping.\n";
+            return;
+        }
+
         // Create test users
         $admin = User::factory()->create([
             'name' => 'Admin',
