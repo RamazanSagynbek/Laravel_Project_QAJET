@@ -47,6 +47,12 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="university" :value="__('University')" />
+            <x-text-input id="university" name="university" type="text" class="mt-1 block w-full" :value="old('university', $user->university)" placeholder="e.g. KBTU, SDU, KazNU" />
+            <x-input-error class="mt-2" :messages="$errors->get('university')" />
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
