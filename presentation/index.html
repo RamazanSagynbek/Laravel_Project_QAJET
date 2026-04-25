@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>QAJET Presentation</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide slide-title">
+    <div class="accent-line"></div>
+    <div class="slide-content">
+        <div class="badge">КУРСОВАЯ РАБОТА</div>
+        <h1><span class="accent">QA</span>JET</h1>
+        <p class="subtitle">Student Assistant Platform</p>
+        <p class="desc">Платформа для студентов: поиск соседей, торговля, услуги и сообщества</p>
+        <div class="author-box">
+            <div class="author-name">Ramazan Sagynbek</div>
+            <div class="author-info">Kazakh-British Technical University (KBTU)</div>
+            <div class="author-info">2026</div>
+        </div>
+    </div>
+    <div class="corner-accent"></div>
+</div>
+
+<!-- SLIDE 2: Relevance -->
+<div class="slide">
+    <div class="slide-number">02</div>
+    <div class="slide-content">
+        <h2>Актуальность</h2>
+        <div class="problems">
+            <div class="problem-card">
+                <div class="problem-icon">🏠</div>
+                <h3>Жильё</h3>
+                <p>Сложно найти соседей по комнате рядом с университетом</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💻</div>
+                <h3>Техника</h3>
+                <p>Нет удобного места для продажи/покупки вещей между студентами</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">📚</div>
+                <h3>Услуги</h3>
+                <p>Сложно найти репетитора или помощь в учёбе среди студентов</p>
+            </div>
+            <div class="problem-card">
+                <div class="problem-icon">💬</div>
+                <h3>Связь</h3>
+                <p>Нет единого пространства для общения студентов одного вуза</p>
+            </div>
+        </div>
+        <div class="solution-banner">
+            <span class="accent">QAJET</span> — единая платформа, которая решает все эти задачи
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3: Goals -->
+<div class="slide">
+    <div class="slide-number">03</div>
+    <div class="slide-content">
+        <h2>Цели и задачи</h2>
+        <div class="goals-grid">
+            <div class="goal-item">
+                <div class="goal-num">1</div>
+                <p>Создать платформу для поиска соседей (Roommates)</p>
+            </div>
+            <div class="goal-item">
+                <div class="goal-num">2</div>
+                <p>Реализовать маркетплейс для студенческих товаров</p>
+            </div>
+            <div class="goal-item">
+                <div class="goal-num">3</div>
+                <p>Добавить доску услуг (репетиторы, дизайн, помощь)</p>
+            </div>
+            <div class="goal-item">
+                <div class="goal-num">4</div>
+                <p>Создать университетское сообщество с чатами</p>
+            </div>
+            <div class="goal-item">
+                <div class="goal-num">5</div>
+                <p>Обеспечить администрирование и модерацию контента</p>
+            </div>
+            <div class="goal-item">
+                <div class="goal-num">6</div>
+                <p>Развернуть проект на облачном хостинге</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4: Architecture -->
+<div class="slide">
+    <div class="slide-number">04</div>
+    <div class="slide-content">
+        <h2>Архитектура системы</h2>
+        <div class="arch-diagram">
+            <!-- Client Layer -->
+            <div class="arch-layer arch-client">
+                <div class="arch-label">Клиент</div>
+                <div class="arch-boxes">
+                    <div class="arch-box">Browser<br><small>Chrome / Firefox / Safari</small></div>
+                </div>
+            </div>
+            <div class="arch-arrow">↓ HTTPS</div>
+            <!-- CDN / Proxy -->
+            <div class="arch-layer arch-cdn">
+                <div class="arch-label">CDN + Reverse Proxy</div>
+                <div class="arch-boxes">
+                    <div class="arch-box accent-box">Render.com<br><small>SSL Termination</small></div>
+                </div>
+            </div>
+            <div class="arch-arrow">↓</div>
+            <!-- Application Layer -->
+            <div class="arch-layer arch-app">
+                <div class="arch-label">Application Layer</div>
+                <div class="arch-boxes">
+                    <div class="arch-box">Docker Container<br><small>PHP 8.4 + Node 20</small></div>
+                    <div class="arch-box accent-box">Laravel 13<br><small>MVC Framework</small></div>
+                </div>
+            </div>
+            <div class="arch-arrow">↓</div>
+            <!-- Data Layer -->
+            <div class="arch-layer arch-data">
+                <div class="arch-label">Data Layer</div>
+                <div class="arch-boxes">
+                    <div class="arch-box">PostgreSQL<br><small>Supabase DB</small></div>
+                    <div class="arch-box">Redis<br><small>Upstash Cache</small></div>
+                    <div class="arch-box">S3 Storage<br><small>Supabase Images</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="arch-note">
+            <span class="accent">Масштабируемая 3-tier архитектура</span> с разделением клиента, сервера и данных
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5: Tech Stack -->
+<div class="slide">
+    <div class="slide-number">05</div>
+    <div class="slide-content">
+        <h2>Технологический стек</h2>
+        <div class="stack-grid">
+            <div class="stack-group">
+                <h3>Backend</h3>
+                <div class="stack-items">
+                    <span class="stack-tag">Laravel 13</span>
+                    <span class="stack-tag">PHP 8.4</span>
+                    <span class="stack-tag">Composer</span>
+                    <span class="stack-tag">Artisan</span>
+                </div>
+            </div>
+            <div class="stack-group">
+                <h3>Frontend</h3>
+                <div class="stack-items">
+                    <span class="stack-tag">Tailwind CSS v3</span>
+                    <span class="stack-tag">Vite 8</span>
+                    <span class="stack-tag">Alpine.js</span>
+                    <span class="stack-tag">Blade</span>
+                </div>
+            </div>
+            <div class="stack-group">
+                <h3>Database</h3>
+                <div class="stack-items">
+                    <span class="stack-tag">PostgreSQL</span>
+                    <span class="stack-tag">Supabase</span>
+                    <span class="stack-tag">Redis</span>
+                    <span class="stack-tag">Upstash</span>
+                </div>
+            </div>
+            <div class="stack-group">
+                <h3>DevOps</h3>
+                <div class="stack-items">
+                    <span class="stack-tag">Docker</span>
+                    <span class="stack-tag">Render.com</span>
+                    <span class="stack-tag">GitHub</span>
+                    <span class="stack-tag">S3 Supabase</span>
+                </div>
+            </div>
+            <div class="stack-group">
+                <h3>Testing</h3>
+                <div class="stack-items">
+                    <span class="stack-tag">PHPUnit</span>
+                    <span class="stack-tag">Feature Tests</span>
+                    <span class="stack-tag">Unit Tests</span>
+                    <span class="stack-tag">Factories</span>
+                </div>
+            </div>
+            <div class="stack-group">
+                <h3>Security</h3>
+                <div class="stack-items">
+                    <span class="stack-tag">Breeze Auth</span>
+                    <span class="stack-tag">Policies</span>
+                    <span class="stack-tag">Middleware</span>
+                    <span class="stack-tag">CSRF</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6: Features -->
+<div class="slide">
+    <div class="slide-number">06</div>
+    <div class="slide-content">
+        <h2>Реализованный функционал</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🏠</div>
+                <h3>Roommates</h3>
+                <p>Создание и поиск объявлений о сдаче/поиске комнат</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛒</div>
+                <h3>Marketplace</h3>
+                <p>Покупка и продажа товаров между студентами</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <h3>Services</h3>
+                <p>Услуги: репетиторство, дизайн, подготовка презентаций</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Community Chat</h3>
+                <p>Чаты по университетам с real-time сообщениями</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3>Notifications</h3>
+                <p>Уведомления о новых сообщениях в чате</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Favorites</h3>
+                <p>Система избранного с полиморфной связью</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Search</h3>
+                <p>Поиск по заголовку и описанию</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👤</div>
+                <h3>Public Profiles</h3>
+                <p>Профили пользователей с их активностью</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7: Admin Panel -->
+<div class="slide">
+    <div class="slide-number">07</div>
+    <div class="slide-content">
+        <h2>Администрирование</h2>
+        <div class="admin-section">
+            <div class="admin-card">
+                <div class="admin-icon">🛡️</div>
+                <h3>Policies</h3>
+                <p>Админ может редактировать и удалять любые объявления, обычные пользователи — только свои</p>
+            </div>
+            <div class="admin-card">
+                <div class="admin-icon">📊</div>
+                <h3>Dashboard</h3>
+                <p>Статистика: пользователи, объявления, товары, услуги. Пагинация по 10 записей</p>
+            </div>
+            <div class="admin-card">
+                <div class="admin-icon">🗑️</div>
+                <h3>Moderation</h3>
+                <p>Удаление контента с очисткой изображений из облачного хранилища</p>
+            </div>
+        </div>
+        <div class="middleware-box">
+            <h3>Middleware «has.university»</h3>
+            <p>Пользователи без указанного университета перенаправляются на редактирование профиля перед доступом к Community</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8: Technical Solutions -->
+<div class="slide">
+    <div class="slide-number">08</div>
+    <div class="slide-content">
+        <h2>Технические решения</h2>
+        <table class="solutions-table">
+            <tr>
+                <th>Проблема</th>
+                <th>Решение</th>
+            </tr>
+            <tr>
+                <td>Дублирование CRUD-кода</td>
+                <td><span class="accent">Trait ManagesResource</span> — единая логика для создания, обновления, удаления и работы с изображениями</td>
+            </tr>
+            <tr>
+                <td>Файлы пропадают на Render</td>
+                <td><span class="accent">Supabase Storage</span> через S3-совместимый API. Конфигурируемый диск через FILESYSTEM_DISK</td>
+            </tr>
+            <tr>
+                <td>Кэш Windows портит Collections</td>
+                <td><span class="accent">Redis</span> для сессий и кэша. Fallback на DB при недоступности</td>
+            </tr>
+            <tr>
+                <td>Mixed Content на Render</td>
+                <td><span class="accent">TrustProxies</span> + ASSET_URL для корректной генерации HTTPS-ссылок</td>
+            </tr>
+            <tr>
+                <td>Бесплатный деплой</td>
+                <td><span class="accent">Render.com</span> + Docker + Blueprint. Миграции при старте контейнера</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- SLIDE 9: Testing -->
+<div class="slide">
+    <div class="slide-number">09</div>
+    <div class="slide-content">
+        <h2>Тестирование</h2>
+        <div class="test-stats">
+            <div class="test-big">
+                <div class="test-number">60</div>
+                <div class="test-label">тестов</div>
+            </div>
+            <div class="test-big">
+                <div class="test-number">126</div>
+                <div class="test-label">assertions</div>
+            </div>
+        </div>
+        <div class="test-categories">
+            <div class="test-cat">
+                <h4>Feature Tests</h4>
+                <ul>
+                    <li>ListingTest — CRUD, поиск, политики</li>
+                    <li>ProductTest — создание, обновление, удаление</li>
+                    <li>ServiceTest — валидация, доступ</li>
+                    <li>ChatTest — сообщения, уведомления</li>
+                    <li>AdminTest — панель, модерация</li>
+                </ul>
+            </div>
+            <div class="test-cat">
+                <h4>Unit Tests</h4>
+                <ul>
+                    <li>ListingPolicyTest — права доступа</li>
+                    <li>Auth tests — регистрация, вход</li>
+                </ul>
+            </div>
+            <div class="test-cat">
+                <h4>Factories</h4>
+                <ul>
+                    <li>Listing, Product, Service</li>
+                    <li>Category, Chat, Message</li>
+                    <li>User с ролями</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10: Current State -->
+<div class="slide">
+    <div class="slide-number">10</div>
+    <div class="slide-content">
+        <h2>Текущее состояние проекта</h2>
+        <div class="status-columns">
+            <div class="status-col done">
+                <h3>✅ Реализовано</h3>
+                <ul>
+                    <li>Деплой на Render.com</li>
+                    <li>Полный CRUD (Listings, Products, Services)</li>
+                    <li>Админ-панель с пагинацией</li>
+                    <li>Система чатов с polling</li>
+                    <li>Уведомления о сообщениях</li>
+                    <li>Избранное (полиморфное)</li>
+                    <li>Поиск по заголовку и описанию</li>
+                    <li>Публичные профили</li>
+                    <li>Supabase Storage для изображений</li>
+                    <li>60 тестов с покрытием</li>
+                </ul>
+            </div>
+            <div class="status-col todo">
+                <h3>⚠️ В планах</h3>
+                <ul>
+                    <li>Google OAuth авторизация</li>
+                    <li>Рейтинги и отзывы</li>
+                    <li>Push-уведомления (PWA)</li>
+                    <li>ML-рекомендации контента</li>
+                    <li>Мобильное приложение</li>
+                    <li>Email-верификация</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11: Future -->
+<div class="slide">
+    <div class="slide-number">11</div>
+    <div class="slide-content">
+        <h2>Перспективы развития</h2>
+        <div class="future-timeline">
+            <div class="future-item">
+                <div class="future-dot"></div>
+                <h4>Q3 2026</h4>
+                <p>Google OAuth, email-верификация, push-уведомления</p>
+            </div>
+            <div class="future-item">
+                <div class="future-dot"></div>
+                <h4>Q4 2026</h4>
+                <p>Система рейтингов и отзывов, верификация пользователей</p>
+            </div>
+            <div class="future-item">
+                <div class="future-dot"></div>
+                <h4>2027</h4>
+                <p>Мобильное приложение на React Native, ML-рекомендации</p>
+            </div>
+            <div class="future-item">
+                <div class="future-dot"></div>
+                <h4>2028+</h4>
+                <p>Интеграция с университетскими системами, партнёрства</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12: Thanks -->
+<div class="slide slide-title">
+    <div class="accent-line"></div>
+    <div class="slide-content">
+        <h1>Спасибо за внимание!</h1>
+        <p class="subtitle">QAJET — Student Assistant Platform</p>
+        <div class="links">
+            <p>🌐 <span class="accent">qajet.onrender.com</span></p>
+            <p>💻 <span class="accent">github.com/RamazanSagynbek/Laravel_Project_QAJET</span></p>
+        </div>
+        <div class="author-box">
+            <div class="author-name">Ramazan Sagynbek</div>
+            <div class="author-info">KBTU | 2026</div>
+        </div>
+    </div>
+    <div class="corner-accent"></div>
+</div>
+
+</body>
+</html>
