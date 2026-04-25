@@ -1,13 +1,14 @@
 #!/bin/bash
 set -e
 
+# Ensure required directories exist (Render has no persistent storage)
+mkdir -p storage/framework/views
+mkdir -p storage/framework/cache
+mkdir -p storage/framework/sessions
+mkdir -p bootstrap/cache
+
 echo "🔗 Linking storage..."
 php artisan storage:link 2>/dev/null || true
-
-echo "⚡ Caching config, routes, views..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
 
 echo "🗄️ Running migrations..."
 php artisan migrate --force
