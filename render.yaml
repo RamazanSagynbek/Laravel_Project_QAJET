@@ -42,17 +42,11 @@ services:
       - key: DB_SSLMODE
         value: require
       - key: SESSION_DRIVER
-        value: redis
+        value: database
       - key: CACHE_STORE
-        value: redis
+        value: database
       - key: QUEUE_CONNECTION
         value: sync
-      - key: REDIS_CLIENT
-        value: predis
-      - key: REDIS_SCHEME
-        value: tls
-      - key: REDIS_CACHE_DB
-        value: '0'
       - key: FILESYSTEM_DISK
         value: supabase
       - key: SUPABASE_REGION
