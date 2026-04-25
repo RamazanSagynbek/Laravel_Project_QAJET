@@ -30,7 +30,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 
 # Copy package files and install/build
 COPY package.json package-lock.json ./
-RUN npm ci --prefer-offline --no-audit
+RUN npm install
 
 # Copy rest of the app
 COPY . .
