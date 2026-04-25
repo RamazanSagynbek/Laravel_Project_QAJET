@@ -1,3 +1,6 @@
+# Cache buster — change this number to force full rebuild
+ARG CACHEBUST=2
+
 FROM php:8.4-cli
 
 # Install system dependencies
