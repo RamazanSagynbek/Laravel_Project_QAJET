@@ -13,6 +13,10 @@ services:
         generateValue: true
       - key: APP_URL
         value: https://qajet.onrender.com
+      - key: ASSET_URL
+        value: https://qajet.onrender.com
+      - key: TRUSTED_PROXIES
+        value: '*'
       - key: BCRYPT_ROUNDS
         value: '12'
       - key: LOG_LEVEL
