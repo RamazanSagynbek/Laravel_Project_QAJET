@@ -1,0 +1,72 @@
+services:
+  - type: web
+    name: qajet
+    runtime: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        value: https://qajet.onrender.com
+      - key: BCRYPT_ROUNDS
+        value: '12'
+      - key: LOG_LEVEL
+        value: error
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: qajet-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: qajet-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: qajet-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: qajet-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: qajet-db
+          property: password
+      - key: DB_SSLMODE
+        value: require
+      - key: SESSION_DRIVER
+        value: redis
+      - key: CACHE_STORE
+        value: redis
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: REDIS_CLIENT
+        value: predis
+      - key: REDIS_SCHEME
+        value: tls
+      - key: REDIS_CACHE_DB
+        value: '0'
+      - key: FILESYSTEM_DISK
+        value: supabase
+      - key: SUPABASE_REGION
+        value: ap-northeast-1
+      - key: SUPABASE_BUCKET
+        value: qajet
+      # Добавь вручную через дашборд Render (чувствительные данные):
+      # APP_KEY — Render сгенерирует автоматически (generateValue: true)
+      # REDIS_HOST, REDIS_PASSWORD, REDIS_PORT — из Upstash
+      # SUPABASE_ACCESS_KEY_ID, SUPABASE_SECRET_ACCESS_KEY
+      # SUPABASE_URL, SUPABASE_ENDPOINT
+
+databases:
+  - name: qajet-db
+    databaseName: qajet
+    user: qajet
+    plan: free
